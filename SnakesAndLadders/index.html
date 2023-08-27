@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sankes and Ladders game replica made by 'MatejBursik' on github">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="img/favicon.jpg" type="image/x-icon">
+    <title>Game</title>
+</head>
+<body>
+    <h1 id="title">Snakes and Ladders</h1>
+    <div id="playZone">
+        <!-- game board -->
+        <svg id="svg" width="1" height="1">
+            <rect width="100%" height="100%" style="fill:rgb(82, 82, 82)" />
+                    
+        </svg>
+
+        <!-- player select & dice roll -->
+        <div id="info">
+            <section id="controlls">
+                <div id="boxP1"><p id="p1" pos="1" winner="false" moves="0">Player 1 (white)</p></div>
+                <div id="boxP2"><p id="p2" pos="1" winner="false" moves="0">Player 2 (black)</p></div>
+                <div id="boxDice"><p id="dice" player="p1">Press to roll the dice</p></div>
+            </section>
+
+            <section>
+                <h2>Instructions</h2>
+                <ol>
+                    <li>Decide on who goes first</li>
+                    <li>Select the active player</li>
+                    <li>Then press the Dice</li>
+                    <li>Select the other player</li>
+                    <li>Then press the Dice</li>
+                    <li>Play until one Player reaches the end</li>
+                    <li>Reload the page to play again</li>
+                </ol>
+            </section>
+        </div>
+    </div>
+
+    <div id="popup-bc">
+        <div id="popup">
+            <section>
+                <p>Player <span id="winner"></span> won!</p>
+                <p>It took them <span id="moves"></span> moves</p>
+            </section>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
