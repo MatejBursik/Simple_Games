@@ -1,0 +1,17 @@
+working:
+- start menu art (animation)
+- level selector art (animation)
+- player shooting
+
+issues:
+- asteroidsis not roatating properly
+
+ideas:
+- save system (in the start menu you can sellect the save file)
+- player buffs (after defeating a level, coin collecting + shop)
+
+plan:
+- oldschool asteroids
+- asteroids coming at you in different patterns
+- occasionally enemy spaceship appears
+- 5 levels (tutorial, only rocks, first enemy, small strike force, boss encounter)
