@@ -1,5 +1,6 @@
 import pygame
 from constants import *
+from laser import *
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, health = 5):
@@ -28,6 +29,15 @@ class Player(pygame.sprite.Sprite):
 
         self.mask = pygame.mask.from_surface(self.sprites[0])
 
+        self.laser_img = pygame.image.load("assets//laser(green).png")
+        self.lasers = []
+        self.laser_cool_down = 0
+
+    def shoot(self):
+        if self.laser_cool_down == 0 and not self.dead:            
+            self.lasers.append(Laser(self.x, self.y, "-y", self.laser_img))
+            self.laser_cool_down = 10
+
     def control(self):
         if not self.dead:
             self.animate = False
@@ -44,6 +54,8 @@ class Player(pygame.sprite.Sprite):
             elif keys[pygame.K_d] and (WIDTH - self.sprites[0].get_rect().width) > self.x:
                 self.x += VELOCITY
                 self.animate = True
+            if keys[pygame.K_v]:
+                self.shoot()
 
             self.mask = pygame.mask.from_surface(self.sprites[0])
         else:
@@ -58,6 +70,11 @@ class Player(pygame.sprite.Sprite):
         if len(self.explosions) == self.current_explosion:
             print("remove from existance")
 
+    def hit(self, obj):
+        for laser in self.lasers:
+            if collide(laser, obj):
+                obj.health -= 1
+    
     def draw(self, window):
         if self.dead:
             if self.current_explosion < len(self.explosions)-1:
@@ -74,4 +91,12 @@ class Player(pygame.sprite.Sprite):
             sprite = self.sprites[int(self.current_sprite)]
         
         if self.current_explosion < len(self.explosions)-1:
+            if self.laser_cool_down > 0:
+                self.laser_cool_down -= 1
+            for laser in self.lasers:
+                if laser.terminate:
+                    self.lasers.remove(laser)
+                    continue
+                laser.move()
+                laser.draw(window)
             window.blit(sprite, (self.x - sprite.get_width()//2, self.y - sprite.get_height()//2))

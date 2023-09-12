@@ -41,7 +41,6 @@ while running:
             # level choosing by pressing button
             for i,button in enumerate(buttons):
                 if button.rect.collidepoint(event.pos):
-                    # running = level(window,i+1)
                     match i+1:
                         case 1:
                             running = lvl1(window)

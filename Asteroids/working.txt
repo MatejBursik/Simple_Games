@@ -1,7 +1,6 @@
 working:
 - start menu art (animation)
 - level selector art (animation)
-- player shooting
 
 issues:
 - asteroidsis not roatating properly

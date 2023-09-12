@@ -46,9 +46,10 @@ def lvl1(window):
             ast.rotate()
         """
 
-        # collisions
+        # collisions player.mask.overlap(ast.mask,(ast.x - player.x, ast.y - player.y))
         for ast in asteroids:
-            if player.mask.overlap(ast.mask,(ast.x - player.x, ast.y - player.y)):
+            player.hit(ast)
+            if collide(player,ast):
                 player.health -= 1
                 ast.health -= 1
         
@@ -60,16 +61,14 @@ def lvl1(window):
         bkgd_y += 1
 
         #draw
-        for idx,ast in enumerate(asteroids):
+        for ast in asteroids:
             if ast.terminate:
-                asteroids.pop(idx)
+                asteroids.remove(ast)
                 continue
             ast.explosion()
             ast.draw(window)
         player.draw(window)
-        print(len(asteroids))
 
         counter += 1
         pygame.display.update()
         clock.tick(FPS)
-        
