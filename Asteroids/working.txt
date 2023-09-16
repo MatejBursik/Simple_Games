@@ -6,6 +6,7 @@ issues:
 - asteroidsis not roatating properly
 
 ideas:
+- enemies rotating towards player
 - save system (in the start menu you can sellect the save file)
 - player buffs (after defeating a level, coin collecting + shop)
 

@@ -1,24 +1,41 @@
-import pygame
+import pygame, random
 from constants import *
 from laser import *
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, health = 5):
-        self.x = x
-        self.y = y
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, position, direction, travel_end, health = 5):
+        self.direction = direction
+        match self.direction:
+            case "+x":
+                rotate = -90
+                self.y = position
+                self.x = 0
+            case "-x":
+                rotate = 90
+                self.y = position
+                self.x = WIDTH
+            case "+y":
+                rotate = 180
+                self.y = 0
+                self.x = position
+            case _:
+                print("Error (no enemy direction)")
+
+        self.travel_end = travel_end
+        self.travel_dist = 0
         self.health = health
         self.sprites = []
         self.current_sprite = 0
         self.animate = False
         
-        self.sprites.append(pygame.image.load("assets//ship//ship(stationary).png"))
-        self.sprites.append(pygame.image.load("assets//ship//ship(a1).png"))
-        self.sprites.append(pygame.image.load("assets//ship//ship(a2).png"))
-        self.sprites.append(pygame.image.load("assets//ship//ship(a3).png"))
+        self.sprites.append(pygame.transform.rotate(pygame.image.load("assets//enemy(stationary).png"),rotate))
+        self.sprites.append(pygame.transform.rotate(pygame.image.load("assets//enemy(a1).png"),rotate))
+        self.sprites.append(pygame.transform.rotate(pygame.image.load("assets//enemy(a2).png"),rotate))
 
         self.explosions = []
         self.current_explosion = 0
         self.dead = False
+        self.terminate = False
         self.explosions.append(pygame.image.load("assets//explosion//explosion1.png"))
         self.explosions.append(pygame.image.load("assets//explosion//explosion2.png"))
         self.explosions.append(pygame.image.load("assets//explosion//explosion3.png"))
@@ -29,40 +46,37 @@ class Player(pygame.sprite.Sprite):
 
         self.mask = pygame.mask.from_surface(self.sprites[0])
 
-        self.laser_img = pygame.image.load("assets//laser(green).png")
+        self.laser_img = pygame.image.load("assets//laser(red).png")
         self.lasers = []
         self.laser_cool_down = 0
 
     def shoot(self):
         if self.laser_cool_down == 0 and not self.dead:            
-            self.lasers.append(Laser(self.x, self.y, "-y", self.laser_img))
-            self.laser_cool_down = 10
+            self.lasers.append(Laser(self.x, self.y, self.direction, self.laser_img))
+            self.laser_cool_down = 30
 
-    def control(self):
+    def move(self):
         if not self.dead:
             self.animate = False
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_w] and self.y > 0:
-                self.y -= VELOCITY
+            if self.travel_end > self.travel_dist:
                 self.animate = True
-            elif keys[pygame.K_s] and (HEIGHT - self.sprites[0].get_rect().height) > self.y:
-                self.y += VELOCITY
-                self.animate = True
-            if keys[pygame.K_a] and self.x > 0:
-                self.x -= VELOCITY
-                self.animate = True
-            elif keys[pygame.K_d] and (WIDTH - self.sprites[0].get_rect().width) > self.x:
-                self.x += VELOCITY
-                self.animate = True
-            if keys[pygame.K_v]:
-                self.shoot()
+                match self.direction:
+                    case "+x":
+                        self.x += VELOCITY
+                        self.travel_dist += VELOCITY
+                    case "-x":
+                        self.x -= VELOCITY
+                        self.travel_dist += VELOCITY
+                    case "+y":
+                        self.y += VELOCITY
+                        self.travel_dist += VELOCITY
+                    case _:
+                        print("Error (no enemy direction)")
 
             self.mask = pygame.mask.from_surface(self.sprites[0])
         else:
             if self.current_explosion > len(self.explosions)-1:
-                self.y = -50
-                self.x = -50
-                self.mask = pygame.mask.from_surface(self.sprites[0])
+                self.terminate = True
 
     def explosion(self):
         if self.health == 0:
@@ -77,7 +91,7 @@ class Player(pygame.sprite.Sprite):
                 laser.terminate = True
     
     def draw(self, window):
-        # player draw
+        # enemy draw
         if self.dead:
             if self.current_explosion < len(self.explosions)-1:
                 self.current_explosion += 0.2
@@ -96,6 +110,7 @@ class Player(pygame.sprite.Sprite):
             window.blit(sprite, (self.x - sprite.get_width()//2, self.y - sprite.get_height()//2))
 
         # laser draw
+        self.shoot()
         if self.laser_cool_down > 0:
             self.laser_cool_down -= 1
         for laser in self.lasers:

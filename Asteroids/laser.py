@@ -9,6 +9,8 @@ class Laser:
         self.sprite = sprite
 
         match self.direction:
+            case "+x":
+                pass
             case "-x":
                 self.sprite = pygame.transform.rotate(self.sprite, 180)
             case "+y":
@@ -39,4 +41,4 @@ class Laser:
         if self.x > WIDTH+50 or self.x < 0-50 or self.y > HEIGHT+50 or self.y < 0-50:
             self.terminate = True
 
-        window.blit(self.sprite, (self.x, self.y))
+        window.blit(self.sprite, (self.x - self.sprite.get_width()//2, self.y - self.sprite.get_height()//2))
