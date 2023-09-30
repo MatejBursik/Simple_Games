@@ -49,7 +49,7 @@ class Asteroid(pygame.sprite.Sprite):
             window.blit(self.sprite, (self.x - self.sprite.get_width()//2, self.y - self.sprite.get_height()//2))
         
         if not self.dead:
-            self.y += 1
+            self.y += VELOCITY//2
             self.x = eval(self.x_formula.replace("y",str(self.y)))
             self.mask = pygame.mask.from_surface(self.sprite)
         

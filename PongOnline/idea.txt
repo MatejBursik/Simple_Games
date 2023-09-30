@@ -1,0 +1,1 @@
+run the game server as a web server so that the game can be spectated on a website

@@ -1,2 +1,0 @@
-Asteroids/__pycache__/
-Asteroids/levels/__pycache__/

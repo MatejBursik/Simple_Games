@@ -10,24 +10,22 @@ def lvl1(window):
 
     player = Player(WIDTH//2,HEIGHT//1.5)
     
-    
-
     # asteroids spawn data [x=, repeate]
     asteroids = []
     asteroid_path = [
-        ["y+5",3],
-        ["-y+500",3],
-        ["2*y",3],
-        ["-0.1*y+200",3],
-        ["0*y+100",3]
+        ["y+5", 30],
+        ["-y+500", 60],
+        ["2*y", 90],
+        ["-0.1*y+200", 120],
+        ["0*y+100", 150]
     ]
 
     # enemy spawn data [position, direction, travel_end]
     enemies = []
     enemy_path = [
-        [WIDTH//2, "+y", HEIGHT//4],
-        [HEIGHT//2, "+x", WIDTH//4],
-        [HEIGHT//2, "-x", WIDTH//4]
+        [WIDTH//2, "+y", HEIGHT//4, 100],
+        [HEIGHT//2, "+x", WIDTH//4, 200],
+        [HEIGHT//2, "-x", WIDTH//4, 300]
     ]
     
     bkgd = pygame.transform.rotate(pygame.image.load("assets//background//background.png").convert(),90)
@@ -43,16 +41,16 @@ def lvl1(window):
                     return True
                 
         # asteroid spawning
-        if counter%30 == 0 and len(asteroid_path) > 0:
-            asteroids.append(Asteroid(asteroid_path[0][0]))
-            asteroid_path[0][1] -= 1
-            if asteroid_path[0][1] == 0:
+        if len(asteroid_path) > 0:
+            if counter == asteroid_path[0][1]:
+                asteroids.append(Asteroid(asteroid_path[0][0]))
                 asteroid_path.pop(0)
 
         # enemy spawning
-        if counter%100 == 0 and len(enemy_path) > 0:
-            enemies.append(Enemy(enemy_path[0][0], enemy_path[0][1], enemy_path[0][2]))
-            enemy_path.pop(0)
+        if len(enemy_path) > 0:
+            if counter == enemy_path[0][3]:
+                enemies.append(Enemy(enemy_path[0][0], enemy_path[0][1], enemy_path[0][2]))
+                enemy_path.pop(0)
         
         # actions
         player.control()
